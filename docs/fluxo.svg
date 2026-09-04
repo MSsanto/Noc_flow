@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="360" viewBox="0 0 1000 360" role="img" aria-label="Fluxo NOC Flow: monitoramento, alerta, atualização, normalização e passagem de turno">
+<rect width="1000" height="360" rx="16" fill="#101b30"/>
+<g font-family="sans-serif" fill="#f1f5f9"><text x="40" y="48" font-size="26" font-weight="700">NOC Flow · ciclo da ocorrência</text><text x="40" y="77" font-size="16" fill="#b8c6da">Desenvolvido por Matheus Santo</text>
+<g stroke="#778aaa" stroke-width="2"><path d="M260 158H310M500 158H550M740 158H790M405 195V260H645V195" fill="none"/></g>
+<rect x="40" y="115" width="220" height="80" rx="10" fill="#263956"/><rect x="310" y="115" width="190" height="80" rx="10" fill="#8f293b"/><rect x="550" y="115" width="190" height="80" rx="10" fill="#85521b"/><rect x="790" y="115" width="180" height="80" rx="10" fill="#176047"/>
+<g font-size="19" text-anchor="middle"><text x="150" y="150">Monitoramento</text><text x="405" y="160">Alerta →</text><text x="645" y="160">Atualização →</text><text x="880" y="160">Normalização</text></g><text x="77" y="176" font-size="14">Texto + data + unidade</text>
+<rect x="365" y="240" width="325" height="67" rx="10" fill="#263956"/><text x="400" y="268" font-size="19">Passagem de turno</text><text x="400" y="292" font-size="14" fill="#b8c6da">Histórico e prévia editável</text></g></svg>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>NOC Flow v1.0.0 · Demonstração</title>
+        <link rel="stylesheet" href="assets/css/styles.css">
+
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark">N</div>
+            <div class="brand-copy"><strong>NOC Flow <span style="font-weight:600;font-size:12px">v1.0.0</span></strong><small>Gerenciador de Ocorrências</small></div>
+        </div>
+        <nav class="nav-group">
+            <div class="nav-label">Operação</div>
+            <button class="nav-btn active" data-scroll="dashboard"><span class="nav-icon">⌂</span><span class="nav-text">Dashboard</span></button>
+            <button class="nav-btn" data-workflow="alert"><span class="nav-icon">♧</span><span class="nav-text">Novo alerta</span></button>
+            <button class="nav-btn" data-tab-nav="initial"><span class="nav-icon">△</span><span class="nav-text">Alertas ativos</span><span class="nav-count red" id="sidebarActiveCount">0</span></button>
+            <button class="nav-btn" data-tab-nav="updated"><span class="nav-icon">↻</span><span class="nav-text">Atualizações</span><span class="nav-count orange" id="sidebarUpdatedCount">0</span></button>
+            <button class="nav-btn" data-tab-nav="normalizations"><span class="nav-icon">✓</span><span class="nav-text">Normalizações</span><span class="nav-count green" id="sidebarNormCount">0</span></button>
+        </nav>
+        <nav class="nav-group">
+            <div class="nav-label">Ferramentas</div>
+            <button class="nav-btn" id="exportAllDataCsvBtn"><span class="nav-icon">⇩</span><span class="nav-text">Exportar CSV</span></button>
+            <button class="nav-btn" id="openShiftReportBtn"><span class="nav-icon">▤</span><span class="nav-text">Passagem de turno</span></button>
+            <button class="nav-btn" id="openMetricsBtn"><span class="nav-icon">◫</span><span class="nav-text">Métricas do turno</span></button>
+            <button class="nav-btn" id="openOperationalBaseBtn"><span class="nav-icon">▦</span><span class="nav-text">Base operacional</span><span class="nav-count blue" id="baseOperationalCount">3</span></button>
+            <button class="nav-btn" id="backupDataBtn"><span class="nav-icon">⇩</span><span class="nav-text">Backup JSON</span></button>
+            <button class="nav-btn" id="restoreDataBtn"><span class="nav-icon">↥</span><span class="nav-text">Restaurar backup</span></button>
+            <input id="restoreDataInput" type="file" accept="application/json,.json" hidden>
+            <button class="nav-btn" data-scroll="updateFormSection"><span class="nav-icon">◫</span><span class="nav-text">Atualizar ocorrência</span></button>
+            <button class="nav-btn" data-scroll="normalizationFormSection"><span class="nav-icon">◎</span><span class="nav-text">Normalizar ocorrência</span></button>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-note">
+                NOC Flow v1.0.0 · DEMONSTRAÇÃO<br>
+                Operação Demonstração · Operações NOC<br>
+                Passagem de turno integrada<br><strong style="color:var(--primary)">BUILD DE DEMONSTRAÇÃO · Base Operacional</strong>
+                <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:10px; letter-spacing:.01em;">
+                    Desenvolvido por <strong style="color:var(--text); font-weight:650;">Matheus Santo</strong>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div class="page-title">
+                <h1>Ocorrências Operação Demonstração</h1>
+                <p>Gerenciador operacional de alertas e comunicados</p>
+                <div class="developer-byline">Desenvolvido por <strong>Matheus Santo</strong></div>
+                <div class="validation-build-badge">DEMONSTRAÇÃO · Base operacional integrada · dados fictícios</div>
+            </div>
+            <div class="mobile-brand">NOC Flow v1.0.0 <span class="mobile-author">· Matheus Santo</span></div>
+            <div class="top-actions">
+                <div class="clock-pill"><span>◷</span><span id="currentDateTime"></span></div>
+                <button id="themeToggle" class="icon-btn" type="button" aria-label="Alternar tema" title="Alternar tema claro/escuro"><span id="themeIcon">☾</span></button>
+                <div class="avatar" title="Matheus Santo">MS</div>
+            </div>
+        </header>
+
+        <div class="content" id="dashboard">
+            <div class="demo-notice" style="margin-bottom:16px;padding:12px;border:1px solid var(--border);border-radius:9px">Demonstração com dados fictícios · <button id="loadDemoBtn" type="button">Carregar demonstração</button></div>
+<section class="stats-grid" aria-label="Resumo das ocorrências">
+                <article class="stat-card"><div class="stat-icon red">♧</div><div><div class="stat-label">Alertas Ativos</div><div class="stat-number" id="activeAlertsCount">0</div><div class="stat-caption">Em aberto</div></div></article>
+                <article class="stat-card"><div class="stat-icon orange">↻</div><div><div class="stat-label">Atualizações</div><div class="stat-number" id="updatedAlertsCount">0</div><div class="stat-caption">Em andamento</div></div></article>
+                <article class="stat-card"><div class="stat-icon green">✓</div><div><div class="stat-label">Normalizações</div><div class="stat-number" id="normalizationsCount">0</div><div class="stat-caption">No turno atual</div></div></article>
+                <article class="stat-card"><div class="stat-icon blue">▣</div><div><div class="stat-label">Total de Ocorrências</div><div class="stat-number" id="totalOccurrencesCount">0</div><div class="stat-caption">Alertas + normalizações</div></div></article>
+            </section>
+
+            <section class="workflow-grid">
+                <article class="workflow-card alert" id="alertFormSection">
+                    <div class="workflow-head"><div class="workflow-title"><span class="symbol" style="color:var(--danger)">♧</span>Novo Alerta</div><button id="goToInitialAlertsBtn" class="ghost-link" type="button">Ver ativos →</button></div>
+                    <div class="workflow-body">
+                        <div><label for="alertRawInput">Cole o alerta do monitoramento</label><textarea id="alertRawInput" rows="8" placeholder="Cole uma ou mais linhas — ou a tabela copiada do monitoramento — aqui...\n\nEx.: 30-08-2026 07:25:29 Monitoramento Unidade Aurora - SP_9000001 - WAN 1 com problemas!"></textarea><div class="helper">Aceita texto simples ou tabela do monitoramento. O NOC Flow identifica data/hora, site e WAN automaticamente e agrupa WAN 1 + WAN 2 próximas.</div></div>
+                        <div style="margin-top:12px"><label for="alertSeverity">Severidade</label><select id="alertSeverity"></select></div><div class="primary-action"><button id="addAlertBtn" class="action-main red" type="button">⌁ &nbsp; Processar Alerta</button></div>
+                    </div>
+                </article>
+
+                <article class="workflow-card update" id="updateFormSection">
+                    <div class="workflow-head"><div class="workflow-title"><span class="symbol" style="color:var(--warning)">↻</span>Atualização</div><button id="goToUpdatedAlertsBtn" class="ghost-link" type="button">Ver atualizações →</button></div>
+                    <div class="workflow-body">
+                        <div class="field-grid">
+                            <div class="span-2"><label for="updateSite">Site / Localidade <span style="color:var(--muted);font-weight:500">(opcional)</span></label><input id="updateSite" list="activeSitesList" autocomplete="off" placeholder="Selecione um alerta ou digite o site, se souber..."><div class="helper">Informe pelo menos um identificador: Site, ITSM ou Chamado/Protocolo. O vínculo com um alerta local é opcional.</div></div>
+                            <div class="field-section-label">Dados do chamado e relatório</div>
+                            <div><label for="updateItsm">Chamado ITSM <span style="color:var(--muted);font-weight:500">(opcional)</span></label><input id="updateItsm" placeholder="Ex.: DEMO-ITSM-001"></div>
+                            <div><label for="updateNumeroChamado">Chamado / Protocolo da Operadora <span style="color:var(--muted);font-weight:500">(opcional)</span></label><input id="updateNumeroChamado" placeholder="Ex.: DEMO-0001"></div>
+                            <div><label for="updateOperadora">Operadora</label><select id="updateOperadora"><option value="">Selecione...</option></select></div>
+                            <div><label for="updateWanStatus">Link afetado <span style="color:var(--muted);font-weight:500">(opcional)</span></label><select id="updateWanStatus"><option value="">Selecione...</option><option value="WAN 1">WAN 1</option><option value="WAN 2">WAN 2</option><option value="WAN 1 e WAN 2">WAN 1 e WAN 2</option><option value="WAN">WAN / não especificado</option></select></div>
+                            <div><label for="updateSla">SLA</label><input id="updateSla" placeholder="Ex.: 24 horas, 6 a 8 horas"></div>
+                            <div class="span-2"><label for="updateReportCategory">Seção na Passagem de Turno</label><select id="updateReportCategory">
+                                <option value="update">🔄 Atualizações de Chamados e Operadoras</option>
+                                <option value="critical">🚨 Incidentes Críticos e Desastres</option>
+                                <option value="exclude">Não incluir esta atualização no relatório</option>
+                            </select></div>
+                            <div class="span-2"><label for="updateReportResumo">Resumo para Passagem de Turno <span style="color:var(--muted);font-weight:500">(opcional)</span></label><textarea id="updateReportResumo" rows="2" placeholder="Se preencher, este texto será usado no relatório. Se deixar vazio, o NOC Flow monta o resumo automaticamente."></textarea></div>
+                            <div class="field-section-label">Comunicado de atualização</div>
+                            <div class="span-2"><label for="updateSituacaoAtual">Situação Atual</label><select id="updateSituacaoAtual">
+                                <option value="">Selecione a situação atual</option>
+                                <option value="__ABRINDO_OPERADORA__">Abrindo chamado com a operadora</option>
+                                <option value="__AGUARDANDO_OPERADORA__">Aguardando atuação da operadora</option>
+                                <option value="Aguardando retorno da Energia Elétrica na localidade">Aguardando retorno da Energia Elétrica na localidade</option>
+                                <option value="Em análise pelo time interno">Em análise pelo time interno</option>
+                                <option value="Problema resolvido, aguardando validação">Problema resolvido, aguardando validação</option>
+                                <option value="Enviado para verificação do field">Enviado para verificação do field</option>
+                                <option value="Outros">Outros</option>
+                            </select></div>
+                            <div class="span-2"><label for="updateAcoesRealizadas">Ações Realizadas</label><textarea id="updateAcoesRealizadas" rows="2" placeholder="Descreva as ações realizadas..."></textarea></div>
+                            <div class="span-2"><label for="updateProximosPassos">Próximos Passos</label><select id="updateProximosPassos">
+                                <option value="">Selecione os próximos passos</option><option value="Aguardar a atuação do time de campo da operadora.">Aguardar a atuação do time de campo da operadora.</option><option value="Monitorar o serviço.">Monitorar o serviço.</option><option value="Entrar em contato com o consultor.">Entrar em contato com o consultor.</option><option value="Validar solução com a unidade.">Validar solução com a unidade.</option><option value="Outros">Outros</option>
+                            </select></div>
+                        </div>
+                        <div class="primary-action"><button id="addUpdateBtn" class="action-main orange" type="button">⌁ &nbsp; Registrar Atualização</button></div>
+                    </div>
+                </article>
+
+                <article class="workflow-card norm" id="normalizationFormSection">
+                    <div class="workflow-head"><div class="workflow-title"><span class="symbol" style="color:var(--success)">✓</span>Normalização</div><button id="goToNormalizationsBtn" class="ghost-link" type="button">Ver normalizações →</button></div>
+                    <div class="workflow-body">
+                        <div class="field-grid">
+                            <div class="span-2"><label for="normSite">Site / Localidade <span style="color:var(--muted);font-weight:500">(opcional)</span></label><input id="normSite" list="activeSitesList" autocomplete="off" placeholder="Selecione um alerta ou digite o site, se souber..."><div class="helper">A normalização pode ser avulsa. Informe pelo menos Site, ITSM ou Chamado/Protocolo.</div></div>
+                            <div><label for="normItsm">Chamado ITSM <span style="color:var(--muted);font-weight:500">(opcional)</span></label><input id="normItsm" placeholder="Ex.: DEMO-ITSM-001"></div>
+                            <div><label for="normNumeroChamado">Chamado / Protocolo da Operadora <span style="color:var(--muted);font-weight:500">(opcional)</span></label><input id="normNumeroChamado" placeholder="Ex.: DEMO-0001"></div>
+                            <div><label for="normOperadora">Operadora <span style="color:var(--muted);font-weight:500">(externa)</span></label><select id="normOperadora"><option value="">Selecione...</option></select></div>
+                            <div><label for="normWanStatus">Link afetado <span style="color:var(--muted);font-weight:500">(opcional)</span></label><select id="normWanStatus"><option value="">Selecione...</option><option value="WAN 1">WAN 1</option><option value="WAN 2">WAN 2</option><option value="WAN 1 e WAN 2">WAN 1 e WAN 2</option><option value="WAN">WAN / não especificado</option></select></div>
+                            <div><label for="normCause">Causa Identificada</label><select id="normCause"><option value="">Selecione...</option><option value="Queda de link">Queda de link</option><option value="Problema de energia">Problema de energia</option><option value="Falha de equipamento">Falha de equipamento</option><option value="Manutenção programada">Manutenção programada</option><option value="Energia elétrica reestabelecida na localidade">Energia elétrica reestabelecida na localidade</option><option value="Outros">Outros</option></select></div>
+                            <div><label for="normAction">Ação Corretiva</label><select id="normAction"><option value="">Selecione...</option><option value="Link reestabelecido apos atuação da operadora">Link reestabelecido apos atuação da operadora</option><option value="Equipamento substituído">Equipamento substituído</option><option value="Configuração ajustada">Configuração ajustada</option><option value="Reinicialização de equipamento">Reinicialização de equipamento</option><option value="Outros">Outros</option></select></div>
+                            <div class="span-2"><label>Status Final</label><input value="Normalizado" disabled style="opacity:.72"></div>
+                        </div>
+                        <div class="primary-action"><button id="addNormalizationBtn" class="action-main green" type="button">✓ &nbsp; Registrar Normalização</button></div>
+                    </div>
+                </article>
+            </section>
+
+            <section class="workspace" id="occurrencesWorkspace">
+                <div class="workspace-top">
+                    <div class="workspace-title">Ocorrências</div>
+                    <div class="tabs" role="tablist">
+                        <button type="button" class="tab-btn active" data-tab="initial">Alertas Ativos <span class="tab-badge" id="tabInitialCount">0</span></button>
+                        <button type="button" class="tab-btn" data-tab="updated">Atualizações <span class="tab-badge" id="tabUpdatedCount">0</span></button>
+                        <button type="button" class="tab-btn" data-tab="normalizations">Normalizações <span class="tab-badge" id="tabNormCount">0</span></button>
+                    </div>
+                    <div class="workspace-tools"><input id="occurrenceSearch" class="search-box" placeholder="Buscar site, chamado ou texto..."></div>
+                </div>
+
+                <div class="occurrence-panel" id="initialAlertsSection" data-panel="initial">
+                    <div class="panel-head"><h2>Alertas em aberto</h2><div class="sort-group"><button id="sortInitialAlertsByDateBtn" class="sort-btn">Mais recentes</button><button id="sortInitialAlertsByTimeBtn" class="sort-btn">Hora</button><button id="sortInitialAlertsBySiteBtn" class="sort-btn">Site</button></div></div>
+                    <div id="initialAlertsContainer"><p id="noInitialAlerts">Nenhum novo alerta ativo no momento.</p></div>
+                </div>
+                <div class="occurrence-panel panel-hidden" id="updatedAlertsSection" data-panel="updated">
+                    <div class="panel-head"><h2>Comunicados de atualização</h2><div class="sort-group"><button id="sortUpdatedAlertsByDateBtn" class="sort-btn">Mais recentes</button><button id="sortUpdatedAlertsByTimeBtn" class="sort-btn">Hora</button><button id="sortUpdatedAlertsBySiteBtn" class="sort-btn">Site</button></div></div>
+                    <div id="updatedAlertsContainer"><p id="noUpdatedAlerts">Nenhuma atualização de alerta no momento.</p></div>
+                </div>
+                <div class="occurrence-panel panel-hidden" id="normalizationsSection" data-panel="normalizations">
+                    <div class="panel-head"><h2>Ocorrências normalizadas</h2><div class="sort-group"><button id="sortNormalizationsByDateBtn" class="sort-btn">Mais recentes</button><button id="sortNormalizationsByTimeBtn" class="sort-btn">Hora</button><button id="sortNormalizationsBySiteBtn" class="sort-btn">Site</button></div></div>
+                    <div id="normalizationsContainer"><p id="noNormalizations">Nenhuma ocorrência normalizada ainda.</p></div>
+                </div>
+            </section>
+            <datalist id="activeSitesList"></datalist>
+        </div>
+    </main>
+</div>
+
+<div id="messageModal" class="fixed inset-0 flex items-center justify-center hidden z-50 modal">
+    <div class="p-6 max-w-sm w-full mx-4 modal-content">
+        <div style="width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--danger-soft);color:var(--danger);font-size:21px;margin-bottom:13px">!</div>
+        <h3 id="modalTitle" class="text-xl font-bold mb-3"></h3>
+        <p id="modalMessage" class="mb-6 text-sm leading-relaxed"></p>
+        <button id="modalCloseBtn" class="w-full py-2.5 font-bold modal-button">OK</button>
+    </div>
+</div>
+
+<div id="decisionModal" class="fixed inset-0 flex items-center justify-center hidden z-50 modal">
+    <div class="p-6 max-w-md w-full mx-4 modal-content">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--warning-soft);color:var(--warning);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:18px">↗</div>
+        <h3 id="decisionTitle" class="text-xl font-bold mb-3">Ocorrência externa</h3>
+        <p id="decisionMessage" class="text-sm leading-relaxed"></p>
+        <div id="decisionNote" class="decision-note"></div>
+        <div class="decision-actions">
+            <button id="decisionCancelBtn" class="decision-btn cancel" type="button">Cancelar</button>
+            <button id="decisionConfirmBtn" class="decision-btn confirm orange" type="button">Importar e Atualizar</button>
+        </div>
+    </div>
+</div>
+
+<div id="shiftReportModal" class="fixed inset-0 flex items-center justify-center hidden z-50 modal">
+    <div class="report-modal-content">
+        <div class="report-head">
+            <div><h2>▤ Relatório de Passagem de Turno</h2><p>Gera o relatório narrativo a partir dos registros estruturados do NOC Flow. Você pode editar a prévia antes de copiar ou baixar.</p></div>
+            <button id="closeShiftReportBtn" class="report-close" type="button" aria-label="Fechar">×</button>
+        </div>
+        <div class="report-controls">
+            <div class="report-control"><label for="shiftReportDate">Data do turno</label><input id="shiftReportDate" type="date"></div>
+            <div class="report-control"><label for="shiftStartTime">Início</label><input id="shiftStartTime" type="time" value="06:00"></div>
+            <div class="report-control"><label for="shiftEndTime">Fim</label><input id="shiftEndTime" type="time" value="18:00"></div>
+            <button id="generateShiftReportBtn" class="report-generate" type="button">Gerar relatório</button>
+        </div>
+        <div class="report-preview-wrap">
+            <div class="report-preview-head"><strong>Pré-visualização editável</strong><span id="shiftReportMeta">Nenhum relatório gerado</span></div>
+            <textarea id="shiftReportPreview" spellcheck="true" placeholder="O relatório aparecerá aqui..."></textarea>
+        </div>
+        <div class="report-help">Dica: o campo <strong>Resumo para Passagem de Turno</strong> da atualização substitui a frase automática daquela ocorrência. Isso permite manter o relatório enxuto sem alterar o texto dos comunicados.</div>
+        <div class="report-actions">
+            <button id="exportShiftCsvBtn" class="report-action green" type="button">⇩ CSV do turno</button>
+            <button id="downloadShiftReportBtn" class="report-action blue" type="button">⇩ Baixar .MD</button>
+            <button id="copyShiftReportBtn" class="report-action primary" type="button">Copiar relatório</button>
+        </div>
+    </div>
+</div>
+
+<div id="metricsModal" class="fixed inset-0 flex items-center justify-center hidden z-50 modal">
+    <div class="metrics-modal-content">
+        <div class="report-head">
+            <div><h2>◫ Métricas do Turno</h2><p>Indicadores locais para o piloto do NOC Flow. As contagens refletem apenas este navegador. Ganho de tempo depende de medição; não há valores presumidos.</p></div>
+            <button id="closeMetricsBtn" class="report-close" type="button" aria-label="Fechar">×</button>
+        </div>
+        <div class="metrics-shift" id="metricsShiftLabel">Turno atual</div>
+        <div class="metrics-grid">
+            <article class="metric-card"><span>Alertas processados</span><strong id="metricAlerts">0</strong></article>
+            <article class="metric-card"><span>Atualizações</span><strong id="metricUpdates">0</strong></article>
+            <article class="metric-card"><span>Normalizações</span><strong id="metricNormalizations">0</strong></article>
+            <article class="metric-card"><span>Relatórios gerados</span><strong id="metricReports">0</strong></article>
+            <article class="metric-card wide"><span>Ações registradas</span><strong id="metricActions">0</strong></article>
+            <article class="metric-card wide"><span>Tempo administrativo poupado (estimado)</span><strong id="metricTimeSaved">Não medido</strong></article>
+        </div>
+        <div class="report-help">Nenhuma economia de tempo foi medida. Configure estimativas somente após cronometrar tarefas equivalentes e documentar a amostra.</div>
+        <div class="report-actions">
+            <button id="exportMetricsBtn" class="report-action blue" type="button">⇩ Exportar métricas JSON</button>
+        </div>
+    </div>
+</div>
+
+<script src="config/operation.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/parser.js"></script>
+<script src="assets/js/shift.js"></script>
+<script src="assets/js/app.js"></script>
+
+<!-- NOC Flow v1.0.0 DEMO: Base Operacional Integrada -->
+<div id="operationalBaseModal" class="fixed inset-0 flex items-center justify-center hidden z-50 modal">
+    <div class="base-modal-content">
+        <div class="base-modal-head">
+            <div>
+                <h2>▦ Base Operacional</h2>
+                <p>Consulta local da base demonstrativa de unidades. Pesquise por nome, ID da unidade, CNPJ ou centro de custo e gere a abertura da operadora sem sair do NOC Flow.</p>
+                <p style="margin-top:6px;font-size:11px;color:var(--muted)">Base fictícia: <strong>3 unidades</strong> · sem cadastros reais</p>
+            </div>
+            <button id="closeOperationalBaseBtn" class="base-close" type="button" aria-label="Fechar">×</button>
+        </div>
+        <div class="base-modal-body">
+            <div class="base-search-row">
+                <input id="operationalBaseSearch" placeholder="Ex.: Unidade Aurora, 9000001 ou DEMO-CC-001" autocomplete="off">
+                <select id="operationalBaseBrand"><option value="">Todas as bandeiras</option></select>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 2px">
+                <button id="importOperationalBaseBtn" type="button" style="border:1px solid var(--border);background:var(--surface-2);color:var(--text);border-radius:8px;padding:7px 10px;font-size:10px;font-weight:750">↥ Atualizar base (CSV/JSON)</button>
+                <button id="resetOperationalBaseBtn" type="button" style="border:1px solid var(--border);background:transparent;color:var(--text-soft);border-radius:8px;padding:7px 10px;font-size:10px;font-weight:700">Restaurar base embarcada</button>
+                <input id="operationalBaseFileInput" type="file" accept=".csv,.json,text/csv,application/json" hidden>
+                <span id="operationalBaseMeta" style="font-size:10px;color:var(--muted);margin-left:auto"></span>
+            </div>
+            <div class="base-results">
+                <div id="operationalBaseList" class="base-list"></div>
+                <div id="operationalBaseDetail" class="base-detail"><div class="base-detail-empty">Selecione uma unidade para visualizar os dados dos links.</div></div>
+            </div>
+            <div class="base-safe-note">🔒 Nesta homologação foram importados somente dados operacionais necessários ao fluxo. Senhas, credenciais, PINPAD, AnyDesk e outros segredos da planilha não fazem parte do HTML.</div>
+        </div>
+    </div>
+</div>
+
+<div id="carrierTicketModal" class="fixed inset-0 flex items-center justify-center hidden z-50 modal">
+    <div class="ticket-modal-content">
+        <div class="base-modal-head">
+            <div>
+                <h2>📡 Abertura de Chamado com a Operadora</h2>
+                <p id="carrierTicketSubtitle">Dados carregados automaticamente da Base Operacional.</p>
+            </div>
+            <button id="closeCarrierTicketBtn" class="base-close" type="button" aria-label="Fechar">×</button>
+        </div>
+        <div class="base-modal-body">
+            <div class="ticket-form-grid">
+                <div class="span-2"><label>Unidade</label><input id="ticketStoreName" readonly></div>
+                <div><label>ID da unidade</label><input id="ticketStoreIbm" readonly></div>
+                <div><label>Link</label><select id="ticketWan"></select></div>
+                <div><label>Operadora</label><input id="ticketOperator" readonly></div>
+                <div><label>Designação</label><input id="ticketDesignation" readonly></div>
+                <div class="span-2"><label>Chamado interno <span style="color:var(--muted);font-weight:500">(opcional)</span></label><input id="ticketInternal" placeholder="Ex.: DEMO-ITSM-001"></div>
+                <div><label>Velocidade</label><input id="ticketSpeed" readonly></div>
+            </div>
+            <label>Texto pronto para copiar</label>
+            <textarea id="carrierTicketPreview" class="ticket-preview" spellcheck="false"></textarea>
+            <div class="ticket-actions">
+                <button id="backToOperationalBaseBtn" type="button">Consultar outra unidade</button>
+                <button id="copyCarrierTicketBtn" class="primary" type="button">Copiar solicitação</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="assets/js/operational-base.js"></script>
+
+<script src="assets/js/demo.js"></script>
+</body>
+</html>

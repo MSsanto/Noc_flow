@@ -1,0 +1,12 @@
+{
+  "name": "noc-flow",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gerenciador configur\u00e1vel de ocorr\u00eancias NOC",
+  "author": "Matheus Santo",
+  "license": "UNLICENSED",
+  "scripts": {
+    "test": "node --test tests/*.test.cjs",
+    "start": "python3 -m http.server 8080"
+  }
+}
