@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 
+from .incidents import router as incidents_router
+
 app = FastAPI(
     title="NOC Flow API",
     version="0.1.0",
     description="API do NOC Flow Cloud para gerenciamento de ocorrencias de rede.",
 )
+app.include_router(incidents_router)
 
 
 @app.get("/health", tags=["health"])
