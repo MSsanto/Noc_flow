@@ -1,8 +1,12 @@
 # NOC Flow
 
+[![Testes](https://github.com/MSsanto/Noc_flow/actions/workflows/tests.yml/badge.svg)](https://github.com/MSsanto/Noc_flow/actions/workflows/tests.yml)
+
 **Desenvolvido por Matheus Santo**
 
 Gerenciador de ocorrências de rede que transforma alertas de monitoramento em comunicados padronizados, acompanha atualizações e normalizações e prepara a passagem de turno. Esta edição de portfólio contém exclusivamente exemplos fictícios.
+
+**[Abrir demonstração online](https://noc-flow-matheus-santo.handy-olm-1850.chatgpt.site)**
 
 ![Fluxo de trabalho do NOC Flow](docs/fluxo.svg)
 
