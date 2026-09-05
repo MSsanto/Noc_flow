@@ -1,0 +1,25 @@
+name: Publicar release v1.0.0
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/release.yml
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Criar tag e release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view v1.0.0 >/dev/null 2>&1; then
+            echo "A release v1.0.0 já existe."
+          else
+            gh release create v1.0.0 --target "$GITHUB_SHA" --title "NOC Flow v1.0.0" --generate-notes
+          fi
