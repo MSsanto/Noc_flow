@@ -8,6 +8,8 @@ Gerenciador de ocorrências de rede que transforma alertas de monitoramento em c
 
 **[Abrir demonstração online](https://noc-flow-matheus-santo.matheus-sergio.chatgpt.site)**
 
+![Dashboard do NOC Flow com dados fictícios](docs/noc-flow-dashboard.jpg)
+
 ![Fluxo de trabalho do NOC Flow](docs/fluxo.svg)
 
 ## Problema resolvido
