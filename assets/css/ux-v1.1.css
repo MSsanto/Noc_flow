@@ -1,0 +1,162 @@
+/* NOC Flow v1.1.0 — refinamentos públicos de UX */
+
+.sidebar {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+.sidebar::-webkit-scrollbar { width: 8px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.ux-nav-group { margin-bottom: 8px; }
+.ux-nav-group .nav-label { margin-top: 2px; }
+
+.ux-system-divider {
+    height: 1px;
+    margin: 8px 10px;
+    background: var(--border);
+}
+
+.ux-danger-nav {
+    color: var(--danger) !important;
+    background: color-mix(in srgb, var(--danger) 7%, transparent) !important;
+}
+
+.ux-danger-nav:hover {
+    background: color-mix(in srgb, var(--danger) 12%, transparent) !important;
+}
+
+.topbar {
+    min-height: 58px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.topbar .page-title p,
+.topbar .developer-byline {
+    display: none;
+}
+
+.topbar .validation-build-badge {
+    margin-top: 4px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.ux-shift-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 0 11px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface-2);
+    color: var(--text-soft);
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.ux-focus-target {
+    outline: 2px solid color-mix(in srgb, var(--primary) 45%, transparent);
+    outline-offset: 5px;
+    border-radius: 10px;
+    transition: outline-color .25s ease;
+}
+
+.stat-card.ux-clickable {
+    cursor: pointer;
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+
+.stat-card.ux-clickable:hover,
+.stat-card.ux-clickable:focus-visible {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--primary) 34%, var(--border));
+    box-shadow: 0 7px 20px rgba(15, 23, 42, .07);
+    outline: none;
+}
+
+.sort-btn.ux-selected {
+    border-color: color-mix(in srgb, var(--primary) 42%, var(--border));
+    background: color-mix(in srgb, var(--primary) 10%, var(--surface-2));
+    color: var(--primary);
+    font-weight: 800;
+}
+
+.ux-match-feedback {
+    min-height: 17px;
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.ux-match-feedback.success { color: var(--success); }
+.ux-match-feedback.warning { color: var(--warning); }
+
+.ux-toast-container {
+    position: fixed;
+    right: 18px;
+    top: 18px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: min(380px, calc(100vw - 36px));
+    pointer-events: none;
+}
+
+.ux-toast {
+    opacity: 0;
+    transform: translateY(-8px);
+    padding: 11px 13px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, .15);
+    font-size: 12px;
+    line-height: 1.45;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.ux-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.ux-toast.success {
+    border-left: 4px solid var(--success);
+}
+
+#operationalBaseModal .base-modal-body,
+#operationalBaseModal .base-detail,
+#operationalBaseModal .base-list {
+    font-size: 12px;
+}
+
+#operationalBaseModal .base-safe-note,
+#operationalBaseModal #operationalBaseMeta {
+    font-size: 11px !important;
+    line-height: 1.45;
+}
+
+@media (max-width: 1500px) {
+    .ux-shift-badge {
+        max-width: 280px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+@media (max-width: 980px) {
+    .ux-shift-badge { display: none; }
+}
