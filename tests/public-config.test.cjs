@@ -51,8 +51,8 @@ test('workflow guidance remains generic and configurable', () => {
   assert.ok(Object.values(guidance.nextStepsBySituation).every(options => Array.isArray(options) && options.length > 0));
 });
 
-test('v1.1 UX and bootstrap scripts compile', () => {
-  for (const relative of ['assets/js/config.js', 'assets/js/ux-v1.1.js']) {
+test('v1.1 bootstrap, UX and metadata bridge scripts compile', () => {
+  for (const relative of ['assets/js/config.js', 'assets/js/ux-v1.1.js', 'assets/js/version-v1.1.js']) {
     const source = fs.readFileSync(path.join(root, relative), 'utf8');
     assert.doesNotThrow(() => new vm.Script(source, { filename: relative }));
   }
@@ -67,7 +67,8 @@ test('source files do not contain hard-coded secret assignments', () => {
     'assets/js/operational-base.js',
     'assets/js/parser.js',
     'assets/js/shift.js',
-    'assets/js/ux-v1.1.js'
+    'assets/js/ux-v1.1.js',
+    'assets/js/version-v1.1.js'
   ];
   const assignment = /\b(password|senha|token|secret|api[_-]?key|credencial)\b\s*[:=]\s*["'][^"']{4,}["']/i;
   for (const relative of files) {
