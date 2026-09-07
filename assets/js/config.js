@@ -37,6 +37,13 @@
             const script = document.createElement('script');
             script.src = 'assets/js/ux-v1.1.js';
             script.dataset.nocflowUx = '1.1';
+            script.onload = () => {
+                if (document.querySelector('script[data-nocflow-version="1.1"]')) return;
+                const bridge = document.createElement('script');
+                bridge.src = 'assets/js/version-v1.1.js';
+                bridge.dataset.nocflowVersion = '1.1';
+                document.body.appendChild(bridge);
+            };
             document.body.appendChild(script);
         }
     }, { once: true });
